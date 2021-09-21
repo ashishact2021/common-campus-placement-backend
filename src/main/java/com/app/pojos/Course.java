@@ -18,13 +18,11 @@ import lombok.Setter;
 @Getter
 
 public class Course extends BaseEntity {
-   
-	
-	// form 2
 	
 	
-	@Column(name = "course_name", length = 20)
-	private String courseName;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private CourseName courseName;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
@@ -33,7 +31,7 @@ public class Course extends BaseEntity {
 	@Column(name = "course_year", length = 4)
 	private int year;
 
-	public Course(String courseName, Batch batch, int year) {
+	public Course(CourseName courseName, Batch batch, int year) {
 		super();
 		this.courseName = courseName;
 		this.batch = batch;

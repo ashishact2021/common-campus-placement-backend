@@ -23,8 +23,6 @@ public class Student extends BaseEntity {
 
 	// basic detials
 
-	// form 3
-
 	@Column(name = "first_name", length = 50)
 	private String firstName;
 
@@ -38,8 +36,6 @@ public class Student extends BaseEntity {
 	private LocalDate dob;
 
 	// academic details
-
-	// form 4
 
 	@Column(name = "marks_10th", length = 10)
 	private double mark10th;
@@ -66,9 +62,9 @@ public class Student extends BaseEntity {
 	@Column(name = "passing_year_post_grad")
 	private LocalDate passingYearPostGrad;
 
+	@Column(name ="marks_ccee", length = 10 )
+	private double markCCEE;
 	// contact details
-
-	// form 5
 
 	@Column(length = 50)
 	private String email;
@@ -98,15 +94,16 @@ public class Student extends BaseEntity {
 	@JoinColumn(name = "credential_id")
 	private Credential credential;
 
-	// student and placement
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "student_id")
-	private List<PlacementDetails> placementDetails = new ArrayList<>();
-
 	// student and project
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "student_id")
 	private List<Project> projects = new ArrayList<>();
+	
+	//student and placement
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "student_id")
+	private List<PlacementDetails> placementDetails = new ArrayList<>();
+
 
 	// student and resume
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

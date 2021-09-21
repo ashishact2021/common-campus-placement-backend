@@ -20,8 +20,9 @@ public class PlacementDetails extends BaseEntity {
 	
 	// form 7
 
-	@Column(length = 20)
-	private String round;
+	@Column(length =15)
+	@Enumerated(EnumType.STRING)
+	private Round round;
 
 	@Column(length = 5, name = "is_selected")
 	@Enumerated(EnumType.STRING)

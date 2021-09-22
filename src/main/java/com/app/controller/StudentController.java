@@ -1,7 +1,10 @@
 package com.app.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +16,16 @@ import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
 import com.app.pojos.Student;
+import com.app.service.IStudentService;
 
 @RestController
 @RequestMapping("/student")
 @CrossOrigin(origins = "http://localhost:3000")
 public class StudentController {
 
+	 @Autowired
+	 private IStudentService studentService;
+	
 	// default const
 	public StudentController() {
 		System.out.println("StudentController.StudentController()");
@@ -30,16 +37,12 @@ public class StudentController {
 	 * */
 
 	// student Registraton
-	@PostMapping("/registration")
-	public ResponseEntity<?> studentRegistration(@RequestBody Student student) {
-		return null;
+	@PostMapping("/registration/{year}/{batch}/{courseName}")
+	public ResponseEntity<?> studentRegistration(@PathVariable int year,@PathVariable String batch,@PathVariable String courseName,@RequestBody Student student) {	
+		return new ResponseEntity<>(studentService.studentRegistration(year, batch, courseName, student).getId(), HttpStatus.CREATED);
+		
 	}
 
-	// course updation
-	@PostMapping("/course")
-	public ResponseEntity<?> studentCourse(@RequestBody Course course) {
-		return null;
-	}
 
 	// store Credential
 	@PostMapping("/credential")

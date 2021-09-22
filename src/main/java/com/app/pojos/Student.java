@@ -29,7 +29,7 @@ public class Student extends BaseEntity {
 	@Column(name = "last_name", length = 50)
 	private String lastName;
 
-	@Column(length = 20)
+	@Column(length = 20,unique=true)
 	private Long prn;
 
 	@Column(name = "dob")
@@ -66,15 +66,15 @@ public class Student extends BaseEntity {
 	private double markCCEE;
 	// contact details
 
-	@Column(length = 50)
+	@Column(length = 50,unique=true)
 	private String email;
-	@Column(name = "mob_no", length = 13)
+	@Column(name = "mob_no", length = 13,unique=true)
 	private long mobNo;
 	@Column(name = "address", length = 200)
 	private String address;
-	@Column(name = "git_link", length = 100)
+	@Column(name = "git_link", length = 100,unique=true)
 	private String gitLink;
-	@Column(name = "linkedin_link", length = 100)
+	@Column(name = "linkedin_link", length = 100,unique=true)
 	private String linkedIn;
 
 	// default const

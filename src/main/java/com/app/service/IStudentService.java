@@ -26,4 +26,6 @@ public interface IStudentService {
 	
 	// all fetching method;
 	Student validateLogin(Credential cred);
+	
+	
 }

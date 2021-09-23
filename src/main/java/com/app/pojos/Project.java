@@ -33,11 +33,5 @@ public class Project extends BaseEntity {
 		System.out.println("Project.Project()");
 	}
 
-	// toString
-	@Override
-	public String toString() {
-		return "Project [projectName=" + projectName + ", projectDescription=" + projectDescription
-				+ ", projectGitLink=" + projectGitLink + ", getId()=" + getId() + "]";
-	}
-
+	
 }

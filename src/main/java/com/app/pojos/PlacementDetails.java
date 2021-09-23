@@ -38,11 +38,6 @@ public class PlacementDetails extends BaseEntity {
 	@JoinColumn(name = "company_id")
 	private Company company;
 
-	// toString
-	@Override
-	public String toString() {
-		return "PlacementDetails [round=" + round + ", isSelected=" + isSelected + ", company=" + company + ", getId()="
-				+ getId() + "]";
-	}
+	
 
 }

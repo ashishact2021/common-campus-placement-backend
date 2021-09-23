@@ -10,6 +10,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,6 +42,7 @@ public class Course extends BaseEntity {
 
 	// association
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties("course")
 	private List<Student> students = new ArrayList<>();
 
 	// default const
@@ -47,11 +50,6 @@ public class Course extends BaseEntity {
 		System.out.println("Course.Course()");
 	}
 
-	// toString
-	@Override
-	public String toString() {
-		return "Course [courseName=" + courseName + ", batch=" + batch + ", year=" + year + ", getId()=" + getId()
-				+ "]";
-	}
+	
 
 }

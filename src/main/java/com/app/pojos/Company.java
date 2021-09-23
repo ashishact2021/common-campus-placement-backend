@@ -47,10 +47,5 @@ public class Company extends BaseEntity {
 		System.out.println("Company.Company()");
 	}
 
-	// toString
-	@Override
-	public String toString() {
-		return "Company [name=" + name + ", link=" + link + ", getId()=" + getId() + "]";
-	}
-
+	
 }

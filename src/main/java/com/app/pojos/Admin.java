@@ -40,10 +40,6 @@ public class Admin extends BaseEntity {
 		System.out.println("Admin.Admin()");
 	}
 
-//toString
-	@Override
-	public String toString() {
-		return "Admin [adminName=" + adminName + ", email=" + email + ", mobNo=" + mobNo + ", getId()=" + getId() + "]";
-	}
+
 
 }

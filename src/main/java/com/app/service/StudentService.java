@@ -115,7 +115,7 @@ public class StudentService implements IStudentService{
 		
 		// fetch the student Record using the credential
 		Optional<Student> student = studentRepo.findByCredential(credential);
-		student.get().getPhoto();
+		student.get().getPhoto().getPhoto();
 		
 		return student.get();
 	}

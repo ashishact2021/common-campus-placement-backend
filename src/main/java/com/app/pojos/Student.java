@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -87,27 +90,32 @@ public class Student extends BaseEntity {
 	// student and course and table
 	@ManyToOne()
 	@JoinColumn(name = "course_id")
+	@JsonIgnoreProperties("students")
 	private Course course;
 
 	// student and credential
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "credential_id")
+	@JsonIgnore
 	private Credential credential;
 
 	// student and project
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "student_id")
+	@JsonIgnore
 	private List<Project> projects = new ArrayList<>();
 	
 	//student and placement
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "student_id")
+	@JsonIgnore
 	private List<PlacementDetails> placementDetails = new ArrayList<>();
 
 
 	// student and resume
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "resume_id")
+	@JsonIgnore
 	private StudentResume resume;
 
 	// student and photo

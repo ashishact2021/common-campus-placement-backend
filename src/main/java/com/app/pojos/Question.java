@@ -24,10 +24,6 @@ public class Question extends BaseEntity {
 		System.out.println("Question.Question()");
 	}
 
-	// toString
-	@Override
-	public String toString() {
-		return "Question [question=" + question + ", getId()=" + getId() + "]";
-	}
+	
 
 }

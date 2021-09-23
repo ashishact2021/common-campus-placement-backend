@@ -1,5 +1,8 @@
 package com.app.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.pojos.Course;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
@@ -45,15 +48,15 @@ public class StudentController {
 
 
 	// store Credential
-	@PostMapping("/credential")
-	public ResponseEntity<?> studentCredential(@RequestBody Credential credential) {
-		return null;
+	@PostMapping("/credential/{sid}")
+	public ResponseEntity<?> studentCredential(@PathVariable int sid,@RequestBody Credential credential) {
+		return ResponseEntity.ok(studentService.studentCredential(sid, credential));
 	}
 
 	// store project details
-	@PostMapping("/project")
-	public ResponseEntity<?> studentProject(@RequestBody Project project) {
-		return null;
+	@PostMapping("/project/{sid}")
+	public ResponseEntity<?> studentProject(@PathVariable int sid,@RequestBody Project project) {
+		return ResponseEntity.ok(studentService.studentProject(sid, project));
 	}
 
 	// store placement details
@@ -63,27 +66,36 @@ public class StudentController {
 	}
 
 	// store student resume
-	@PostMapping("/resume")
-	public ResponseEntity<?> studentResume(@RequestBody MultipartFile studentResume) {
+	@PostMapping("/resume/{sid}")
+	public ResponseEntity<?> studentResume(@PathVariable int sid,@RequestParam MultipartFile studentResume) throws IOException {
 		// create resume class instance and set the property by fetching multipart file
 		// and then store the resume instance
 		// in the database
-		return null;
+	//	studentResume.transferTo(new File("E:\\temp\\"+studentResume.getOriginalFilename()));
+		return ResponseEntity.ok(studentService.studentResume(sid, studentResume));
 	}
 
 	// store student photo
-	@PostMapping("/photo")
-	public ResponseEntity<?> studentPhoto(@RequestBody MultipartFile studentPhoto) {
+	@PostMapping("/photo/{sid}")
+	public ResponseEntity<?> studentPhoto(@PathVariable int sid,@RequestParam MultipartFile studentPhoto) throws IOException {
 		// create Photo class instance and set the property by fetching multipart file
 		// and then store the Photo instance
 		// in the database
-		return null;
+		return ResponseEntity.ok(studentService.studentPhoto(sid, studentPhoto));
 	}
 
+	
+	// for user login authentication
+	@PostMapping("/login")
+	public ResponseEntity<?> validateLogin(@RequestBody Credential credential){
+		return ResponseEntity.ok(studentService.validateLogin(credential));
+	}
+	
 	/*-----------------------------------------------------------------------------------------------------------------------------------
 	 *  student data fetching part
 	 * 
 	 * */
 
+	
 	 
 }

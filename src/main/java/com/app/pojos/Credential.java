@@ -14,7 +14,6 @@ import lombok.ToString;
 @Table(name = "login_credentials")
 @Setter
 @Getter
-@ToString(callSuper = true)
 public class Credential extends BaseEntity {
 
 	// form 1

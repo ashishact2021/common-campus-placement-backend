@@ -85,7 +85,7 @@ public class Student extends BaseEntity {
 	// association
 
 	// student and course and table
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "course_id")
 	private Course course;
 
@@ -113,6 +113,6 @@ public class Student extends BaseEntity {
 	// student and photo
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "photo_id")
-	private StudentResume photo;
+	private StudentPhoto photo;
 
 }

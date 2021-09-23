@@ -19,6 +19,7 @@ public class GlobalExceptionHanler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(CourseNotFoundException.class)
 	public ResponseEntity<?> handleCourseNotFoundException(CourseNotFoundException e)
 	{
+		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage(),LocalDateTime.now()) );
 	}
 }

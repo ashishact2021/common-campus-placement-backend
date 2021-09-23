@@ -1,5 +1,7 @@
 package com.app.service;
 
+import java.io.IOException;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.pojos.Credential;
@@ -11,14 +13,17 @@ public interface IStudentService {
 
 	Student studentRegistration(int year, String batch, String courseName, Student student);
 
-	int studentCredential(Credential credential);
+	int studentCredential(int sid,Credential credential);
 
-	int studentPlacement(PlacementDetails placementDetails);
+	int studentPlacement(int sid,PlacementDetails placementDetails);
 
-	int studentResume(MultipartFile studentResume);
+	int studentResume(int sid,MultipartFile studentResume)throws IOException;
 
-	int studentPhoto(MultipartFile studentPhoto);
+	int studentPhoto(int sid,MultipartFile studentPhoto)throws IOException;
 
-	int studentProject(Project project);
+	int studentProject(int sid,Project project);
 
+	
+	// all fetching method;
+	Student validateLogin(Credential cred);
 }

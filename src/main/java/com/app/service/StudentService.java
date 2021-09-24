@@ -142,7 +142,7 @@ public class StudentService implements IStudentService{
 		PlacementDetails transientPlacementDetais =new PlacementDetails();
 		transientPlacementDetais.setIsSelected(SelectionStatus.valueOf(placementDetails.getIsSelected().toUpperCase()));
 		transientPlacementDetais.setRound(Round.valueOf(placementDetails.getRound().toUpperCase()));
-		transientPlacementDetais.setCompany(companyRepo.findByName(placementDetails.getCompanyName()));
+		transientPlacementDetais.setCompany(companyRepo.findByName(placementDetails.getCompanyName().toUpperCase()));
 	
 		// insert the RECORD
 		Student student = studentRepo.findById(sid).get();

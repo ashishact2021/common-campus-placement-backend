@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -14,12 +15,15 @@ import com.app.custom_exception.InvalidCredentialException;
 import com.app.dao.CourseRepository;
 import com.app.dao.CredentialRepository;
 import com.app.dao.StudentRepository;
+import com.app.dto.PlacementDetailsDto;
+import com.app.dto.SuccessMessageDto;
 import com.app.pojos.Batch;
 import com.app.pojos.Course;
 import com.app.pojos.CourseName;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
+import com.app.pojos.Question;
 import com.app.pojos.Student;
 import com.app.pojos.StudentPhoto;
 import com.app.pojos.StudentResume;
@@ -40,15 +44,24 @@ public class StudentService implements IStudentService{
 	// student Registraton
 	@Override
 	public Student studentRegistration(int year,String batch, String courseName,Student student) {
-	    Batch batch1=Batch.valueOf(batch.toUpperCase());
-	    CourseName courseName1=CourseName.valueOf(courseName.toUpperCase());
-	    Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(courseName1, batch1, year);
-	  Course course=  courseOptional.orElseThrow(()-> new CourseNotFoundException("can not the find the course !!"));
-	  course.getStudents().add(student);
-	   student.setCourse(course);
-	   return student;
+	     Batch batch1=Batch.valueOf(batch.toUpperCase());
+	     CourseName courseName1=CourseName.valueOf(courseName.toUpperCase());
+	     Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(courseName1, batch1, year);
+	     Course course=  courseOptional.orElseThrow(()-> new CourseNotFoundException("can not the find the course !!"));
+	     course.getStudents().add(student);
+	     student.setCourse(course);
+	    return student;
 	}
 
+	@Override
+	 public String registerTest(Student student) {
+		 Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(student.getCourse().getCourseName(),
+				 student.getCourse().getBatch(), student.getCourse().getYear());
+	     Course course=  courseOptional.orElseThrow(()-> new CourseNotFoundException("can not the find the course !!"));
+	     course.getStudents().add(student);
+	     student.setCourse(course);
+	     return "Hurrah successfully registered";
+	 }
 
 	// store Credential
 	@Override
@@ -69,12 +82,7 @@ public class StudentService implements IStudentService{
 		return sid;
 	}
 
-	// store placement details
-	@Override
-	public int studentPlacement(int sid,PlacementDetails placementDetails) {
-		return 0;
-	}
-
+	
 	// store student resume
 	@Override
 	public int studentResume(int sid,MultipartFile studentResume) throws IOException {
@@ -118,5 +126,54 @@ public class StudentService implements IStudentService{
 		student.get().getPhoto().getPhoto();
 		
 		return student.get();
+	}
+
+
+	@Override
+	public SuccessMessageDto uploadProject(int sid, Project project) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public SuccessMessageDto studentPlacement(int sid, PlacementDetails placementDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Student> allStudentInParticularCourse() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Project> getAllProject(int sid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public StudentResume downloadResume(int sid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<PlacementDetailsDto> getAllPlacementDetails(int sid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Question> getAllQuestion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

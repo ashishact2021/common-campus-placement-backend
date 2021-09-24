@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -88,7 +89,7 @@ public class Student extends BaseEntity {
 	// association
 
 	// student and course and table
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id")
 	@JsonIgnoreProperties("students")
 	private Course course;
@@ -96,8 +97,18 @@ public class Student extends BaseEntity {
 	// student and credential
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "credential_id")
-	@JsonIgnore
+	//@JsonIgnore
 	private Credential credential;
+       
+	@JsonIgnore //ignore this property during serilization
+	public Credential getCredential() {
+		return credential;
+	}
+	
+	@JsonProperty //DO NOT ignore this property during de-ser
+	public void setCredential(Credential credential) {
+		this.credential = credential;
+	}
 
 	// student and project
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

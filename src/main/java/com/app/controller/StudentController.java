@@ -2,6 +2,9 @@ package com.app.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.custom_exception.CourseNotFoundException;
+import com.app.dao.CourseRepository;
+import com.app.dao.StudentRepository;
+import com.app.pojos.Course;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
@@ -25,11 +32,15 @@ import com.app.service.IStudentService;
 @RestController
 @RequestMapping("/student")
 @CrossOrigin(origins = "http://localhost:3000")
+
 public class StudentController {
 
 	 @Autowired
 	 private IStudentService studentService;
 	
+	 @Autowired
+	 private CourseRepository courseRepo;
+	 
 	// default const
 	public StudentController() {
 		System.out.println("StudentController.StudentController()");
@@ -47,7 +58,13 @@ public class StudentController {
 		
 	}
 
-
+@PostMapping("/registration2")
+public String register(@RequestBody Student student) {
+	 
+   return  studentService.registerTest(student);
+}
+	
+	
 	// store Credential
 	@PostMapping("/credential/{sid}")
 	public ResponseEntity<?> studentCredential(@PathVariable int sid,@RequestBody Credential credential) {
@@ -88,15 +105,10 @@ public class StudentController {
 		return ResponseEntity.ok(studentService.validateLogin(credential));
 	}
 //----------------------------------------------------------------------------------------------------	
-	// upload project 
-	@PostMapping("/project/{sid}")
-	public ResponseEntity<?> uploadProject(@PathVariable int sid, @RequestBody Project project){
-		return null;
-	}
 	
 	// store placement details
-		@PostMapping("/placement")
-		public ResponseEntity<?> studentPlacement(@RequestBody PlacementDetails placementDetails) {
+		@PostMapping("/placement/{sid}")
+		public ResponseEntity<?> studentPlacement(@PathVariable int sid,@RequestBody PlacementDetails placementDetails) {
 			return null;
 		}
 	
@@ -108,8 +120,9 @@ public class StudentController {
 		
 		
    // find all the student based on the year , batch , course
-		@PostMapping("/allStudent/{year}/{batch}/{course}")
-		public List<Student> allStudentInParticularCourse(@PathVariable int year, @PathVariable String batch, @PathVariable String course){
+		// create a student dto to send only requred  field
+		@PostMapping("/allStudent")
+		public List<Student> allStudentInParticularCourse(){
 			return null;
 		}
 	

@@ -21,12 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.app.custom_exception.CourseNotFoundException;
 import com.app.dao.CourseRepository;
 import com.app.dao.StudentRepository;
+import com.app.dto.DtoToInsertPlacementDetails;
 import com.app.pojos.Course;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
 import com.app.pojos.Question;
 import com.app.pojos.Student;
+import com.app.pojos.StudentPhoto;
 import com.app.service.IStudentService;
 
 @RestController
@@ -108,8 +110,8 @@ public String register(@RequestBody Student student) {
 	
 	// store placement details
 		@PostMapping("/placement/{sid}")
-		public ResponseEntity<?> studentPlacement(@PathVariable int sid,@RequestBody PlacementDetails placementDetails) {
-			return null;
+		public ResponseEntity<?> studentPlacement(@PathVariable int sid,@RequestBody DtoToInsertPlacementDetails placementDto) {
+			return ResponseEntity.ok( studentService.studentPlacement(sid, placementDto));
 		}
 	
 	
@@ -153,6 +155,10 @@ public String register(@RequestBody Student student) {
 	   }
 	   
 	   
+	   @PostMapping("/download/photo/{sid}")
+	   public StudentPhoto downloadPhoto(@PathVariable int sid) {
+		   return null;
+	   }
 	   
 	
 	 

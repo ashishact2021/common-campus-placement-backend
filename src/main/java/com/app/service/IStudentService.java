@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.dto.PlacementDetailsDto;
+import com.app.dto.DtoToInsertPlacementDetails;
+import com.app.dto.SendPlacementDetailsDto;
 import com.app.dto.SuccessMessageDto;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
@@ -28,9 +29,7 @@ public interface IStudentService {
 	int studentProject(int sid, Project project);
 	// -------------------------------------------------------------
 
-	public SuccessMessageDto  uploadProject(int sid, Project project);
-
-	public SuccessMessageDto  studentPlacement(int sid, PlacementDetails placementDetails);
+	public SuccessMessageDto  studentPlacement(int sid, DtoToInsertPlacementDetails placementDto);
 
 	public List<Student> allStudentInParticularCourse();
 
@@ -38,7 +37,7 @@ public interface IStudentService {
 
 	public StudentResume downloadResume(int sid);
 
-    public	List<PlacementDetailsDto> getAllPlacementDetails(int sid);
+    public	List<SendPlacementDetailsDto> getAllPlacementDetails(int sid);
 
 	public   List<Question> getAllQuestion();
 

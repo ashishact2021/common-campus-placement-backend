@@ -10,8 +10,9 @@ import lombok.Setter;
 public class SuccessMessageDto {
 
 	private String message;
-	public SuccessMessageDto() {
+	public SuccessMessageDto(String message) {
           System.out.println("SuccessMessageDto.SuccessMessageDto()");
+          this.message=message;
 	}
 
 }

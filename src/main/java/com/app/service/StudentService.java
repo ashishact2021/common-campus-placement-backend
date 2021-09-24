@@ -12,10 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.custom_exception.CourseNotFoundException;
 import com.app.custom_exception.InvalidCredentialException;
+import com.app.dao.CompanyRepository;
 import com.app.dao.CourseRepository;
 import com.app.dao.CredentialRepository;
 import com.app.dao.StudentRepository;
-import com.app.dto.PlacementDetailsDto;
+import com.app.dto.DtoToInsertPlacementDetails;
+import com.app.dto.SendPlacementDetailsDto;
 import com.app.dto.SuccessMessageDto;
 import com.app.pojos.Batch;
 import com.app.pojos.Course;
@@ -24,6 +26,8 @@ import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
 import com.app.pojos.Question;
+import com.app.pojos.Round;
+import com.app.pojos.SelectionStatus;
 import com.app.pojos.Student;
 import com.app.pojos.StudentPhoto;
 import com.app.pojos.StudentResume;
@@ -40,6 +44,9 @@ public class StudentService implements IStudentService{
 	
 	@Autowired 
 	private CredentialRepository credRepo;
+	
+	@Autowired
+	private CompanyRepository companyRepo;
 	
 	// student Registraton
 	@Override
@@ -130,16 +137,19 @@ public class StudentService implements IStudentService{
 
 
 	@Override
-	public SuccessMessageDto uploadProject(int sid, Project project) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public SuccessMessageDto studentPlacement(int sid, PlacementDetails placementDetails) {
-		// TODO Auto-generated method stub
-		return null;
+	public SuccessMessageDto studentPlacement(int sid, DtoToInsertPlacementDetails placementDetails) {
+		// create the placement details pojo
+		PlacementDetails transientPlacementDetais =new PlacementDetails();
+		transientPlacementDetais.setIsSelected(SelectionStatus.valueOf(placementDetails.getIsSelected().toUpperCase()));
+		transientPlacementDetais.setRound(Round.valueOf(placementDetails.getRound().toUpperCase()));
+		transientPlacementDetais.setCompany(companyRepo.findByName(placementDetails.getCompanyName()));
+	
+		// insert the RECORD
+		Student student = studentRepo.findById(sid).get();
+	    student.getPlacementDetails().add(transientPlacementDetais);
+	    studentRepo.save(student);
+	    
+		return new SuccessMessageDto("student placement datials is added successfully");
 	}
 
 
@@ -165,7 +175,7 @@ public class StudentService implements IStudentService{
 
 
 	@Override
-	public List<PlacementDetailsDto> getAllPlacementDetails(int sid) {
+	public List<SendPlacementDetailsDto> getAllPlacementDetails(int sid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

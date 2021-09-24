@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ import com.app.pojos.Project;
 import com.app.pojos.Question;
 import com.app.pojos.Student;
 import com.app.pojos.StudentPhoto;
+import com.app.pojos.StudentResume;
 import com.app.service.IStudentService;
 
 @RestController
@@ -81,7 +83,7 @@ public String register(@RequestBody Student student) {
 
 	
 
-	// store student resume
+	// store student resume into the data base
 	@PostMapping("/resume/{sid}")
 	public ResponseEntity<?> studentResume(@PathVariable int sid,@RequestParam MultipartFile studentResume) throws IOException {
 		// create resume class instance and set the property by fetching multipart file
@@ -106,7 +108,14 @@ public String register(@RequestBody Student student) {
 	public ResponseEntity<?> validateLogin(@RequestBody Credential credential){
 		return ResponseEntity.ok(studentService.validateLogin(credential));
 	}
-//----------------------------------------------------------------------------------------------------	
+	
+	
+	// add question with the to a particualr company
+	@PostMapping("/add/question/{cid}")// cid =company id
+	public ResponseEntity<?> insertQuestion(@PathVariable int cid,@RequestBody Question quetion){
+		return ResponseEntity.ok(studentService.addQuestion(cid, quetion));
+	}
+	
 	
 	// store placement details
 		@PostMapping("/placement/{sid}")
@@ -131,14 +140,18 @@ public String register(@RequestBody Student student) {
 	// find all the  project of any particular student
 	@PostMapping("/fetch/project/{sid}")
 	public   List<Project>  getAllProject(@PathVariable int sid){
-		return null;
+		return studentService.getAllProject(sid);
 	}
 	   
 	   
-	   // download resume
+	   // download resume from database
 	   @PostMapping("/download/resume/{sid}")
 	public  ResponseEntity<?>  downloadResume(@PathVariable int sid){
-		   return null;
+		   StudentResume downloadResume = studentService.downloadResume(sid);
+		   System.out.println(downloadResume.getResumeName());
+	//	   System.out.println(Arrays.toString(downloadResume.getResumeContent()));
+		   System.out.println("in side download Response controller");
+		   return ResponseEntity.ok(downloadResume);
 	   }
 	   
 	   
@@ -146,20 +159,23 @@ public String register(@RequestBody Student student) {
 	   // use dto object to store placementDetails and comany name as one object to send the client  
 	   @PostMapping("/fetch/placementdetails/{sid}")
        List<?> getAllPlacementDetails(@PathVariable int sid){
-		   return null;
+		   return studentService.getAllPlacementDetails(sid);
 	   }
+	   
+	   
 	   // find all the question of a particual company
 	   @PostMapping("/question/{cid}")
-	public   List<Question> getAllQuestion(){
-		   return null;
+	public   List<Question> getAllQuestion(@PathVariable int cid){
+		   return studentService.getAllQuestion(cid);
 	   }
 	   
-	   
+	   // download the photo of the a particular student
 	   @PostMapping("/download/photo/{sid}")
-	   public StudentPhoto downloadPhoto(@PathVariable int sid) {
-		   return null;
+	   public ResponseEntity<?> downloadPhoto(@PathVariable int sid) {
+		  return ResponseEntity.ok(studentService.downloadPhoto(sid));
 	   }
 	   
 	
+	   
 	 
 }

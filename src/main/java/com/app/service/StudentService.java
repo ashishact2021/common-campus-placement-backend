@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,6 +139,7 @@ public class StudentService implements IStudentService{
 
 	@Override
 	public SuccessMessageDto studentPlacement(int sid, DtoToInsertPlacementDetails placementDetails) {
+		System.out.println(placementDetails.getCompanyName());
 		// create the placement details pojo
 		PlacementDetails transientPlacementDetais =new PlacementDetails();
 		transientPlacementDetais.setIsSelected(SelectionStatus.valueOf(placementDetails.getIsSelected().toUpperCase()));
@@ -152,7 +154,7 @@ public class StudentService implements IStudentService{
 		return new SuccessMessageDto("student placement datials is added successfully");
 	}
 
-
+   // not to implement 
 	@Override
 	public List<Student> allStudentInParticularCourse() {
 		// TODO Auto-generated method stub
@@ -160,30 +162,70 @@ public class StudentService implements IStudentService{
 	}
 
 
+	// get all project
 	@Override
 	public List<Project> getAllProject(int sid) {
-		// TODO Auto-generated method stub
-		return null;
+    Student student = studentRepo.findById(sid).get();
+    System.out.println(student.getDob());
+		return student.getProjects();
 	}
 
 
+	
+	// student resume download 
 	@Override
 	public StudentResume downloadResume(int sid) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		 return studentRepo.findByIdWithResume(sid).get().getResume();
 	}
+	
+	
+	// download the photo 
+		@Override
+		public StudentPhoto downloadPhoto(int sid) {
+			return studentRepo.findByIdWithPhoto(sid).get().getPhoto();
+		}
 
 
+		
+		// get all the placement detalis of a particular student
 	@Override
 	public List<SendPlacementDetailsDto> getAllPlacementDetails(int sid) {
-		// TODO Auto-generated method stub
-		return null;
+		// find the student persistant pojo
+	     Student student = studentRepo.findById(sid).get();
+	     //  find the list of his placemet details
+	     List<PlacementDetails> placementDetails = student.getPlacementDetails();
+	    //create the list of SendPlacementDeailsDto
+	     List<SendPlacementDetailsDto> placementDetailsOfStudent=new ArrayList<SendPlacementDetailsDto>();
+	     placementDetails.forEach(e->{
+	    	 // create and populate the plaementDetailsDto
+	    	  SendPlacementDetailsDto  pd=new SendPlacementDetailsDto();
+	    	  pd.setIsSelected(e.getIsSelected().toString());
+	    	  pd.setRound(e.getRound().toString());
+	    	  pd.setCid(e.getCompany().getId().toString());
+	    	  pd.setCompanyName(e.getCompany().getName());
+	    	  
+	    	  // add that in the list of placement details
+	    	  placementDetailsOfStudent.add(pd);
+	     });
+	     // return that populated list 
+		return placementDetailsOfStudent;
 	}
 
 
+	// get all the question based on company 
 	@Override
-	public List<Question> getAllQuestion() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Question> getAllQuestion(int cid) {
+		return companyRepo.findById(cid).get().getQuestions();
 	}
+
+	
+	// add the qustion  to any company
+	@Override
+	public SuccessMessageDto addQuestion(int cid, Question question) {
+		 companyRepo.findById(cid).get().getQuestions().add(question);
+		 return new SuccessMessageDto("question iserted successfully");
+	}
+
+	
 }

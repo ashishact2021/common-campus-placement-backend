@@ -14,6 +14,7 @@ import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
 import com.app.pojos.Question;
 import com.app.pojos.Student;
+import com.app.pojos.StudentPhoto;
 import com.app.pojos.StudentResume;
 
 public interface IStudentService {
@@ -39,7 +40,7 @@ public interface IStudentService {
 
     public	List<SendPlacementDetailsDto> getAllPlacementDetails(int sid);
 
-	public   List<Question> getAllQuestion();
+	public   List<Question> getAllQuestion(int cid);
 
 	//------------------------------------------------------------
 
@@ -48,4 +49,10 @@ public interface IStudentService {
 	
 	 public String registerTest(Student student);
 
+	 
+	 // add qustion
+	 SuccessMessageDto addQuestion(int cid,Question question);
+	 
+	 // download image
+	 StudentPhoto downloadPhoto(int sid);
 }

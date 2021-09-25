@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Admin extends BaseEntity {
-
+   
 	@Column(name = "admin_name", length = 50)
 	private String adminName;
 	@Column(name = "email", length = 50)

@@ -228,4 +228,12 @@ public class StudentService implements IStudentService{
 	}
 
 	
+	// return all the list of student
+	@Override
+	public List<Student> findAllStudent() {
+		// TODO Auto-generated method stub
+		return studentRepo.findAll();
+	}
+
+	
 }

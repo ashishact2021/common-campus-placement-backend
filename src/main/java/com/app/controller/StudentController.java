@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,28 +58,40 @@ public class StudentController {
 	 * 
 	 * */
 
-	// student Registraton
-	@PostMapping("/registration/{year}/{batch}/{courseName}")
-	public ResponseEntity<?> studentRegistration(@PathVariable int year,@PathVariable String batch,@PathVariable String courseName,@RequestBody Student student) {	
-		return new ResponseEntity<>(studentService.studentRegistration(year, batch, courseName, student).getId(), HttpStatus.CREATED);
-		
-	}
-
-@PostMapping("/registration2")
-public String register(@RequestBody Student student) {
-	 
+	/*
+	 * // student Registraton
+	 * 
+	 * @PostMapping("/registration/{year}/{batch}/{courseName}") public
+	 * ResponseEntity<?> studentRegistration(@PathVariable int year,@PathVariable
+	 * String batch,@PathVariable String courseName,@RequestBody Student student) {
+	 * return new ResponseEntity<>(studentService.studentRegistration(year, batch,
+	 * courseName, student).getId(), HttpStatus.CREATED);
+	 * 
+	 * }
+	 */
+	
+	
+ // url="http://localhost:8080/student/registration"
+	// controller to register the student
+@PostMapping("/registration")
+public String register(@RequestBody @Valid Student student) {	 
    return  studentService.registerTest(student);
 }
 	
 	
-	// store Credential
-	@PostMapping("/credential/{sid}")
-	public ResponseEntity<?> studentCredential(@PathVariable int sid,@RequestBody Credential credential) {
-		return ResponseEntity.ok(studentService.studentCredential(sid, credential));
-	}
+/*
+ * // store Credential
+ * 
+ * @PostMapping("/credential/{sid}") public ResponseEntity<?>
+ * studentCredential(@PathVariable int sid,@RequestBody Credential credential) {
+ * return ResponseEntity.ok(studentService.studentCredential(sid, credential));
+ * }
+ */
+
 
 	// store project details
-	@PostMapping("/project/{sid}")
+//url="http://localhost:8080/student/add/project/{sid}"
+	@PostMapping("/add/project/{sid}")
 	public ResponseEntity<?> studentProject(@PathVariable int sid,@RequestBody Project project) {
 		return ResponseEntity.ok(studentService.studentProject(sid, project));
 	}
@@ -84,7 +99,8 @@ public String register(@RequestBody Student student) {
 	
 
 	// store student resume into the data base
-	@PostMapping("/resume/{sid}")
+	//url="http://localhost:8080/student/add/resume/{sid}"
+	@PostMapping("/add/resume/{sid}")
 	public ResponseEntity<?> studentResume(@PathVariable int sid,@RequestParam MultipartFile studentResume) throws IOException {
 		// create resume class instance and set the property by fetching multipart file
 		// and then store the resume instance
@@ -94,7 +110,8 @@ public String register(@RequestBody Student student) {
 	}
 
 	// store student photo
-	@PostMapping("/photo/{sid}")
+	//url="http://localhost:8080/student/add/photo/{sid}"
+	@PostMapping("/add/photo/{sid}")
 	public ResponseEntity<?> studentPhoto(@PathVariable int sid,@RequestParam MultipartFile studentPhoto) throws IOException {
 		// create Photo class instance and set the property by fetching multipart file
 		// and then store the Photo instance
@@ -104,21 +121,15 @@ public String register(@RequestBody Student student) {
 
 	
 	// for user login authentication
+	//url="http://localhost:8080/student/login"
 	@PostMapping("/login")
 	public ResponseEntity<?> validateLogin(@RequestBody Credential credential){
 		return ResponseEntity.ok(studentService.validateLogin(credential));
 	}
 	
-	
-	// add question with the to a particualr company
-	@PostMapping("/add/question/{cid}")// cid =company id
-	public ResponseEntity<?> insertQuestion(@PathVariable int cid,@RequestBody Question quetion){
-		return ResponseEntity.ok(studentService.addQuestion(cid, quetion));
-	}
-	
-	
 	// store placement details
-		@PostMapping("/placement/{sid}")
+	//url="http://localhost:8080/student/add/placement/{sid}"
+		@PostMapping("add/placement/{sid}")
 		public ResponseEntity<?> studentPlacement(@PathVariable int sid,@RequestBody DtoToInsertPlacementDetails placementDto) {
 			return ResponseEntity.ok( studentService.studentPlacement(sid, placementDto));
 		}
@@ -132,20 +143,23 @@ public String register(@RequestBody Student student) {
 		
    // find all the student based on the year , batch , course
 		// create a student dto to send only requred  field
-		@PostMapping("/allStudent")
-		public List<Student> allStudentInParticularCourse(){
-			return null;
+		//url="http://localhost:8080/student/get/allStudent"	
+		@GetMapping("/get/allStudent")
+		public List<Student> findAllStudent(){
+			return studentService.findAllStudent();
 		}
 	
 	// find all the  project of any particular student
-	@PostMapping("/fetch/project/{sid}")
+		//url="http://localhost:8080/student/fetch/project/{sid}"	
+	@GetMapping("/fetch/project/{sid}")
 	public   List<Project>  getAllProject(@PathVariable int sid){
 		return studentService.getAllProject(sid);
 	}
 	   
 	   
 	   // download resume from database
-	   @PostMapping("/download/resume/{sid}")
+	//url="http://localhost:8080/student/download/resume/{sid}"	
+	   @GetMapping("/download/resume/{sid}")
 	public  ResponseEntity<?>  downloadResume(@PathVariable int sid){
 		   StudentResume downloadResume = studentService.downloadResume(sid);
 		   System.out.println(downloadResume.getResumeName());
@@ -157,17 +171,14 @@ public String register(@RequestBody Student student) {
 	   
 	   // find all the placement details of  any particular student
 	   // use dto object to store placementDetails and comany name as one object to send the client  
-	   @PostMapping("/fetch/placementdetails/{sid}")
+	 //url="http://localhost:8080/student/fetch/placementdetails/{sid}"	
+	   @GetMapping("/fetch/placementdetails/{sid}")
        List<?> getAllPlacementDetails(@PathVariable int sid){
 		   return studentService.getAllPlacementDetails(sid);
 	   }
 	   
 	   
-	   // find all the question of a particual company
-	   @PostMapping("/question/{cid}")
-	public   List<Question> getAllQuestion(@PathVariable int cid){
-		   return studentService.getAllQuestion(cid);
-	   }
+	  
 	   
 	   // download the photo of the a particular student
 	   @PostMapping("/download/photo/{sid}")

@@ -12,6 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,51 +33,63 @@ import lombok.Setter;
 public class Student extends BaseEntity {
 
 	// basic detials
-
+     @NotBlank(message = "First name is mandatory")
 	@Column(name = "first_name", length = 50)
 	private String firstName;
 
+     @NotBlank(message = "Last name is mandatory")
 	@Column(name = "last_name", length = 50)
 	private String lastName;
 
 	@Column(length = 20,unique=true)
+	 @NotNull(message = "Prn is mandatory")
 	private Long prn;
 
 	@Column(name = "dob")
+	@NotNull(message = "Date of birth is mandatory")
+	@Past(message ="Date of Birth must be from past")
 	private LocalDate dob;
 
 	// academic details
-
+	
 	@Column(name = "marks_10th", length = 10)
 	private double mark10th;
+	@Past(message = "10th completeing Date must be from past")
 	@Column(name = "passing_year_10th")
 	private LocalDate passingYear10th;
 
 	@Column(name = "marks_12th", length = 10)
 	private double mark12th;
+	@Past(message = "12th completing Date must be from past")
 	@Column(name = "passing_year_12th")
 	private LocalDate passingYear12th;
 
 	@Column(name = "marks_diploma", length = 10)
 	private double markDiploma;
+	@Past(message = " Diploma completing Date must be from past")
 	@Column(name = "passing_year_diploma")
 	private LocalDate passingYearDiploma;
 
 	@Column(name = "marks_grad", length = 10)
 	private double markGrad;
+	@Past(message = "Graduation completing Date must be from past")
 	@Column(name = "passing_year_grad")
 	private LocalDate passingYearGrad;
 
 	@Column(name = "marks_post_grad", length = 10)
 	private double markPostGrad;
+	@Past(message = "Post GraduationDate must be from past")
 	@Column(name = "passing_year_post_grad")
 	private LocalDate passingYearPostGrad;
 
 	@Column(name ="marks_ccee", length = 10 )
+	@NotNull(message = "CCEE mark is completly")
+	@Positive(message = "CCEE mark positive number is allowed")
 	private double markCCEE;
 	// contact details
 
 	@Column(length = 50,unique=true)
+	@Email(message = "Email must in email format")
 	private String email;
 	@Column(name = "mob_no", length = 13,unique=true)
 	private long mobNo;

@@ -55,4 +55,6 @@ public interface IStudentService {
 	 
 	 // download image
 	 StudentPhoto downloadPhoto(int sid);
+	 
+	 public List<Student> findAllStudent();
 }

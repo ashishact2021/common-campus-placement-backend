@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,9 @@ public class StudentService implements IStudentService{
 	
 	@Autowired
 	private CompanyRepository companyRepo;
+	
+	@Autowired
+	private EntityManager  manager;
 	
 	/*
 	 * // student Registraton
@@ -230,6 +234,15 @@ public class StudentService implements IStudentService{
 	public List<Student> findAllStudent() {
 		// TODO Auto-generated method stub
 		return studentRepo.findAll();
+	}
+	
+	/**
+	 * update operation------------------------------------------------------------------------------------------
+	 */
+	@Override
+	public SuccessMessageDto updateStudentDetails(Student std) {
+		manager.merge(std);
+		return new SuccessMessageDto("Student details updated successfully");
 	}
 
 	

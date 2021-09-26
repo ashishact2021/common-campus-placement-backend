@@ -55,4 +55,10 @@ public interface IStudentService {
 	 StudentPhoto downloadPhoto(int sid);
 	 
 	 public List<Student> findAllStudent();
+	 
+	 
+	 /**
+	  * update student details------------------------------------------------------------------------------------------------------------
+	  */
+	 SuccessMessageDto updateStudentDetails(Student std);
 }

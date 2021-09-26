@@ -83,8 +83,6 @@ public class Student extends BaseEntity {
 	private LocalDate passingYearPostGrad;
 
 	@Column(name ="marks_ccee", length = 10 )
-	@NotNull(message = "CCEE mark is completly")
-	@Positive(message = "CCEE mark positive number is allowed")
 	private double markCCEE;
 	// contact details
 

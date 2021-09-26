@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -171,7 +172,13 @@ public ResponseEntity<?> register(@RequestBody @Valid Student student) {
 		  return ResponseEntity.ok(studentService.downloadPhoto(sid));
 	   }
 	   
-	
+
+	  /**
+	   * update  operatoin on the data base--------------------------------------------------------------------------------------------------
+	   */
 	   
-	 
+	   @PutMapping("/updateDetails")
+	   public ResponseEntity<?>  updateStudetntDetails(@RequestBody @Valid Student student){
+		   return ResponseEntity.ok(studentService.updateStudentDetails(student));
+	   }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.custom_exception.CourseNotFoundException;
 import com.app.custom_exception.InvalidCredentialException;
+import com.app.dao.AdminRepository;
 import com.app.dao.CompanyRepository;
 import com.app.dao.CourseRepository;
 import com.app.dao.CredentialRepository;
@@ -25,9 +26,7 @@ import com.app.dao.StudentRepository;
 import com.app.dto.DtoToInsertPlacementDetails;
 import com.app.dto.SendPlacementDetailsDto;
 import com.app.dto.SuccessMessageDto;
-import com.app.pojos.Batch;
 import com.app.pojos.Course;
-import com.app.pojos.CourseName;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
@@ -56,6 +55,9 @@ public class StudentService implements IStudentService{
 	
 	@Autowired
 	private EntityManager  manager;
+	
+	@Autowired
+	private AdminRepository adminRepo;
 	
 	/*
 	 * // student Registraton
@@ -126,15 +128,21 @@ public class StudentService implements IStudentService{
 
 	// validate Student credential
 	@Override
-	public Student validateLogin(Credential cred) {
+	public Object validateLogin(Credential cred) {
 		Credential credential=credRepo.findByUserNameAndPassword(cred.getUserName(),cred.getPassword()).
 				orElseThrow(()->new InvalidCredentialException("invalid credential!") );
 		
+		Optional<?>  user=null;
 		// fetch the student Record using the credential
-		Optional<Student> student = studentRepo.findByCredential(credential);
+		if(credential.getRole().equals(com.app.pojos.Role.valueOf("STUDENT"))) {		
+			user = studentRepo.findByCredential(credential);
+		}else {
+			// the user is Admin
+			user=adminRepo.findByCredential(credential);
+		}
 		
 		
-		return student.get();
+		return user.get();
 	}
 
 

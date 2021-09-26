@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.app.dto.DtoToInsertPlacementDetails;
 import com.app.dto.SendPlacementDetailsDto;
 import com.app.dto.SuccessMessageDto;
+import com.app.pojos.BaseEntity;
 import com.app.pojos.Credential;
 import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
@@ -43,7 +44,7 @@ public interface IStudentService {
 	//------------------------------------------------------------
 
 	// all fetching method;
-	Student validateLogin(Credential cred);
+	Object validateLogin(Credential cred);
 	
 	 public SuccessMessageDto studentRegister(Student student);
 

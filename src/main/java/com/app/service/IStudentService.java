@@ -19,20 +19,18 @@ import com.app.pojos.StudentResume;
 
 public interface IStudentService {
 
-	Student studentRegistration(int year, String batch, String courseName, Student student);
+	//Student studentRegistration(int year, String batch, String courseName, Student student);
+	
+	int addStudentResume(int sid, MultipartFile studentResume) throws IOException;
 
-	int studentCredential(int sid, Credential credential);
+	int addStudentPhoto(int sid, MultipartFile studentPhoto) throws IOException;
 
-	int studentResume(int sid, MultipartFile studentResume) throws IOException;
-
-	int studentPhoto(int sid, MultipartFile studentPhoto) throws IOException;
-
-	int studentProject(int sid, Project project);
+	int addStudentProject(int sid, Project project);
 	// -------------------------------------------------------------
 
-	public SuccessMessageDto  studentPlacement(int sid, DtoToInsertPlacementDetails placementDto);
+	public SuccessMessageDto  addStudentPlacement(int sid, DtoToInsertPlacementDetails placementDto);
 
-	public List<Student> allStudentInParticularCourse();
+	public List<Student> allStudentDetails();
 
 	public List<Project> getAllProject(int sid);
 
@@ -47,7 +45,7 @@ public interface IStudentService {
 	// all fetching method;
 	Student validateLogin(Credential cred);
 	
-	 public String registerTest(Student student);
+	 public SuccessMessageDto studentRegister(Student student);
 
 	 
 	 // add qustion

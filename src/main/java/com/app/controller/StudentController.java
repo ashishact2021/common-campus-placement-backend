@@ -1,38 +1,30 @@
 package com.app.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.custom_exception.CourseNotFoundException;
 import com.app.dao.CourseRepository;
-import com.app.dao.StudentRepository;
 import com.app.dto.DtoToInsertPlacementDetails;
-import com.app.pojos.Course;
 import com.app.pojos.Credential;
-import com.app.pojos.PlacementDetails;
 import com.app.pojos.Project;
-import com.app.pojos.Question;
 import com.app.pojos.Student;
-import com.app.pojos.StudentPhoto;
 import com.app.pojos.StudentResume;
 import com.app.service.IStudentService;
 
@@ -74,26 +66,15 @@ public class StudentController {
  // url="http://localhost:8080/student/registration"
 	// controller to register the student
 @PostMapping("/registration")
-public String register(@RequestBody @Valid Student student) {	 
-   return  studentService.registerTest(student);
+public ResponseEntity<?> register(@RequestBody @Valid Student student) {	 
+   return ResponseEntity.status(HttpStatus.ACCEPTED).body( studentService.studentRegister(student));
 }
-	
-	
-/*
- * // store Credential
- * 
- * @PostMapping("/credential/{sid}") public ResponseEntity<?>
- * studentCredential(@PathVariable int sid,@RequestBody Credential credential) {
- * return ResponseEntity.ok(studentService.studentCredential(sid, credential));
- * }
- */
-
 
 	// store project details
 //url="http://localhost:8080/student/add/project/{sid}"
 	@PostMapping("/add/project/{sid}")
 	public ResponseEntity<?> studentProject(@PathVariable int sid,@RequestBody Project project) {
-		return ResponseEntity.ok(studentService.studentProject(sid, project));
+		return ResponseEntity.ok(studentService.addStudentProject(sid, project));
 	}
 
 	
@@ -106,7 +87,7 @@ public String register(@RequestBody @Valid Student student) {
 		// and then store the resume instance
 		// in the database
 	//	studentResume.transferTo(new File("E:\\temp\\"+studentResume.getOriginalFilename()));
-		return ResponseEntity.ok(studentService.studentResume(sid, studentResume));
+		return ResponseEntity.ok(studentService.addStudentResume(sid, studentResume));
 	}
 
 	// store student photo
@@ -116,7 +97,7 @@ public String register(@RequestBody @Valid Student student) {
 		// create Photo class instance and set the property by fetching multipart file
 		// and then store the Photo instance
 		// in the database
-		return ResponseEntity.ok(studentService.studentPhoto(sid, studentPhoto));
+		return ResponseEntity.ok(studentService.addStudentPhoto(sid, studentPhoto));
 	}
 
 	
@@ -131,7 +112,7 @@ public String register(@RequestBody @Valid Student student) {
 	//url="http://localhost:8080/student/add/placement/{sid}"
 		@PostMapping("add/placement/{sid}")
 		public ResponseEntity<?> studentPlacement(@PathVariable int sid,@RequestBody DtoToInsertPlacementDetails placementDto) {
-			return ResponseEntity.ok( studentService.studentPlacement(sid, placementDto));
+			return ResponseEntity.ok( studentService.addStudentPlacement(sid, placementDto));
 		}
 	
 	
@@ -159,14 +140,18 @@ public String register(@RequestBody @Valid Student student) {
 	   
 	   // download resume from database
 	//url="http://localhost:8080/student/download/resume/{sid}"	
-	   @GetMapping("/download/resume/{sid}")
-	public  ResponseEntity<?>  downloadResume(@PathVariable int sid){
-		   StudentResume downloadResume = studentService.downloadResume(sid);
-		   System.out.println(downloadResume.getResumeName());
-	//	   System.out.println(Arrays.toString(downloadResume.getResumeContent()));
-		   System.out.println("in side download Response controller");
-		   return ResponseEntity.ok(downloadResume);
-	   }
+	// download resume from database
+		@GetMapping("/download/resume/{sid}")
+		public ResponseEntity<?> downloadResume(@PathVariable int sid) throws IOException {
+			StudentResume downloadResume = studentService.downloadResume(sid);
+			System.out.println(downloadResume.getResumeName());
+			System.out.println("in side download Response controller");
+			String encodedString = Base64.getEncoder().encodeToString(downloadResume.getResumeContent());
+			byte[] resume = Base64.getDecoder().decode(encodedString);
+			return ResponseEntity.status(HttpStatus.FOUND).contentType(MediaType.APPLICATION_PDF).body(resume); 
+
+		}
+
 	   
 	   
 	   // find all the placement details of  any particular student
@@ -181,7 +166,7 @@ public String register(@RequestBody @Valid Student student) {
 	  
 	   
 	   // download the photo of the a particular student
-	   @PostMapping("/download/photo/{sid}")
+	   @GetMapping("/download/photo/{sid}")
 	   public ResponseEntity<?> downloadPhoto(@PathVariable int sid) {
 		  return ResponseEntity.ok(studentService.downloadPhoto(sid));
 	   }

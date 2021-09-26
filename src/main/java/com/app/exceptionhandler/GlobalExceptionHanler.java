@@ -48,10 +48,7 @@ public class GlobalExceptionHanler extends ResponseEntityExceptionHandler{
 	  StringBuilder sb = new StringBuilder();
 	  ex.getBindingResult().getFieldErrors().forEach(e ->
 	  sb.append(e.getDefaultMessage()+"  "));
-	 
-		
-		
-		
+	  
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ErrorResponse(sb.toString(),LocalDateTime.now()));
 	}

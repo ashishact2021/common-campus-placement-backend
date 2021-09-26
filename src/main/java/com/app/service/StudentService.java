@@ -1,5 +1,9 @@
 package com.app.service;
 
+import static com.app.CustomCommandLineRunner.PHOTO_PATH;
+import static com.app.CustomCommandLineRunner.RESUME_PATH;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,41 +53,32 @@ public class StudentService implements IStudentService{
 	@Autowired
 	private CompanyRepository companyRepo;
 	
-	// student Registraton
-	@Override
-	public Student studentRegistration(int year,String batch, String courseName,Student student) {
-	     Batch batch1=Batch.valueOf(batch.toUpperCase());
-	     CourseName courseName1=CourseName.valueOf(courseName.toUpperCase());
-	     Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(courseName1, batch1, year);
-	     Course course=  courseOptional.orElseThrow(()-> new CourseNotFoundException("can not the find the course !!"));
-	     course.getStudents().add(student);
-	     student.setCourse(course);
-	    return student;
-	}
+	/*
+	 * // student Registraton
+	 * 
+	 * @Override public Student studentRegistration(int year,String batch, String
+	 * courseName,Student student) { Batch
+	 * batch1=Batch.valueOf(batch.toUpperCase()); CourseName
+	 * courseName1=CourseName.valueOf(courseName.toUpperCase()); Optional<Course>
+	 * courseOptional = courseRepo.findByCourseNameAndBatchAndYear(courseName1,
+	 * batch1, year); Course course= courseOptional.orElseThrow(()-> new
+	 * CourseNotFoundException("can not the find the course !!"));
+	 * course.getStudents().add(student); student.setCourse(course); return student;
+	 * }
+	 */
 
 	@Override
-	 public String registerTest(Student student) {
+	 public SuccessMessageDto studentRegister(Student student) {
 		 Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(student.getCourse().getCourseName(),
 				 student.getCourse().getBatch(), student.getCourse().getYear());
 	     Course course=  courseOptional.orElseThrow(()-> new CourseNotFoundException("can not the find the course !!"));
 	     course.getStudents().add(student);
 	     student.setCourse(course);
-	     return "Hurrah successfully registered";
+	     return new SuccessMessageDto("User Registered successfully");
 	 }
-
-	// store Credential
-	@Override
-	public int studentCredential(int sid,  Credential credential) {
-		System.out.println("in service"+sid+credential.getPassword()+credential.getUserName());
-		Student student = studentRepo.findById(sid).get();
-		student.setCredential(credential);
-		studentRepo.save(student);
-		return sid;
-	}
-
 	// store project details
 	@Override
-	public int studentProject(int sid,Project project) {
+	public int addStudentProject(int sid,Project project) {
 		Student student = studentRepo.findById(sid).get();
 		student.getProjects().add(project);
 		studentRepo.save(student);
@@ -92,35 +87,37 @@ public class StudentService implements IStudentService{
 
 	
 	// store student resume
-	@Override
-	public int studentResume(int sid,MultipartFile studentResume) throws IOException {
-		// create resume class instance and set the property by fetching multipart file
-		// and then store the resume instance
-		// in the database
-		StudentResume stdResume=new StudentResume();
-		stdResume.setResumeName(studentResume.getOriginalFilename());
-		stdResume.setResumeContent(studentResume.getBytes());
-		
-		Student student = studentRepo.findById(sid).get();
-		student.setResume(stdResume);
-		studentRepo.save(student);
-		return sid;
-	}
+		@Override
+		public int addStudentResume(int sid, MultipartFile studentResume) throws IOException {
+			// create resume class instance and set the property by fetching multipart file
+			// and then store the resume instance
+			// in the database
+			StudentResume stdResume = new StudentResume();
+			stdResume.setResumeName(studentResume.getOriginalFilename());
+			stdResume.setResumeContent(studentResume.getBytes());
 
-	// store student photo
-	@Override
-	public int studentPhoto(int sid,MultipartFile studentPhoto) throws IOException {
-		// create Photo class instance and set the property by fetching multipart file
-		// and then store the Photo instance
-		// in the database
-		StudentPhoto stdPhoto =new StudentPhoto();
-		stdPhoto.setPhoto(studentPhoto.getBytes());
-		
-		Student student = studentRepo.findById(sid).get();
-		student.setPhoto(stdPhoto);
-		studentRepo.save(student);
-		return sid;
-	}
+			Student student = studentRepo.findById(sid).get();
+			student.setResume(stdResume);
+			studentRepo.save(student);
+			studentResume.transferTo(new File(RESUME_PATH + "\\" + studentResume.getOriginalFilename()));
+			return sid;
+		}
+
+		// store student photo
+		@Override
+		public int addStudentPhoto(int sid, MultipartFile studentPhoto) throws IOException {
+			// create Photo class instance and set the property by fetching multipart file
+			// and then store the Photo instance
+			// in the database
+			StudentPhoto stdPhoto = new StudentPhoto();
+			stdPhoto.setPhoto(studentPhoto.getBytes());
+
+			Student student = studentRepo.findById(sid).get();
+			student.setPhoto(stdPhoto);
+			studentRepo.save(student);
+			studentPhoto.transferTo(new File(PHOTO_PATH + "\\" + studentPhoto.getOriginalFilename()));
+			return sid;
+		}
 
 
 	// validate Student credential
@@ -131,14 +128,14 @@ public class StudentService implements IStudentService{
 		
 		// fetch the student Record using the credential
 		Optional<Student> student = studentRepo.findByCredential(credential);
-		student.get().getPhoto().getPhoto();
+		
 		
 		return student.get();
 	}
 
 
 	@Override
-	public SuccessMessageDto studentPlacement(int sid, DtoToInsertPlacementDetails placementDetails) {
+	public SuccessMessageDto addStudentPlacement(int sid, DtoToInsertPlacementDetails placementDetails) {
 		System.out.println(placementDetails.getCompanyName());
 		// create the placement details pojo
 		PlacementDetails transientPlacementDetais =new PlacementDetails();
@@ -156,7 +153,7 @@ public class StudentService implements IStudentService{
 
    // not to implement 
 	@Override
-	public List<Student> allStudentInParticularCourse() {
+	public List<Student> allStudentDetails() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,6 +1,5 @@
 package com.app.exceptionhandler;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpHeaders;
@@ -13,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.app.custom_exception.CourseNotFoundException;
+import com.app.custom_exception.InvalidCredentialException;
 import com.app.dto.ErrorResponse;
 
 
@@ -28,6 +28,16 @@ public class GlobalExceptionHanler extends ResponseEntityExceptionHandler{
 	}
 	
 	
+	// exception handler for credential
+	@ExceptionHandler(InvalidCredentialException.class)
+	public ResponseEntity<?> catchAllException(InvalidCredentialException e){
+		e.printStackTrace();
+		ErrorResponse errorResponse = new ErrorResponse();
+	    errorResponse.setMessage(e.getMessage()) ;
+	    errorResponse.setTimestamp(LocalDateTime.now());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+	}
+	
 	// exception handler for all the exception occured in the project 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> catchAllException(RuntimeException e){
@@ -37,6 +47,7 @@ public class GlobalExceptionHanler extends ResponseEntityExceptionHandler{
 	    errorResponse.setTimestamp(LocalDateTime.now());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
+	
 	
 	
 	// exception handler for all the exception occured in  the pojo validtion

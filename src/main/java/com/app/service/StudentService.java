@@ -59,20 +59,8 @@ public class StudentService implements IStudentService{
 	@Autowired
 	private AdminRepository adminRepo;
 	
-	/*
-	 * // student Registraton
-	 * 
-	 * @Override public Student studentRegistration(int year,String batch, String
-	 * courseName,Student student) { Batch
-	 * batch1=Batch.valueOf(batch.toUpperCase()); CourseName
-	 * courseName1=CourseName.valueOf(courseName.toUpperCase()); Optional<Course>
-	 * courseOptional = courseRepo.findByCourseNameAndBatchAndYear(courseName1,
-	 * batch1, year); Course course= courseOptional.orElseThrow(()-> new
-	 * CourseNotFoundException("can not the find the course !!"));
-	 * course.getStudents().add(student); student.setCourse(course); return student;
-	 * }
-	 */
 
+	// student registration
 	@Override
 	 public SuccessMessageDto studentRegister(Student student) {
 		 Optional<Course> courseOptional = courseRepo.findByCourseNameAndBatchAndYear(student.getCourse().getCourseName(),
@@ -126,25 +114,7 @@ public class StudentService implements IStudentService{
 		}
 
 
-	// validate Student credential
-	@Override
-	public Object validateLogin(Credential cred) {
-		Credential credential=credRepo.findByUserNameAndPassword(cred.getUserName(),cred.getPassword()).
-				orElseThrow(()->new InvalidCredentialException("invalid credential!") );
-		
-		Optional<?>  user=null;
-		// fetch the student Record using the credential
-		if(credential.getRole().equals(com.app.pojos.Role.valueOf("STUDENT"))) {		
-			user = studentRepo.findByCredential(credential);
-		}else {
-			// the user is Admin
-			user=adminRepo.findByCredential(credential);
-		}
-		
-		
-		return user.get();
-	}
-
+	
 
 	@Override
 	public SuccessMessageDto addStudentPlacement(int sid, DtoToInsertPlacementDetails placementDetails) {

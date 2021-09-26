@@ -43,8 +43,7 @@ public interface IStudentService {
 
 	//------------------------------------------------------------
 
-	// all fetching method;
-	Object validateLogin(Credential cred);
+	// all fetching method
 	
 	 public SuccessMessageDto studentRegister(Student student);
 

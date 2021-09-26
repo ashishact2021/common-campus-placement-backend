@@ -50,18 +50,6 @@ public class StudentController {
 	 *  student data entry part
 	 * 
 	 * */
-
-	/*
-	 * // student Registraton
-	 * 
-	 * @PostMapping("/registration/{year}/{batch}/{courseName}") public
-	 * ResponseEntity<?> studentRegistration(@PathVariable int year,@PathVariable
-	 * String batch,@PathVariable String courseName,@RequestBody Student student) {
-	 * return new ResponseEntity<>(studentService.studentRegistration(year, batch,
-	 * courseName, student).getId(), HttpStatus.CREATED);
-	 * 
-	 * }
-	 */
 	
 	
  // url="http://localhost:8080/student/registration"
@@ -99,14 +87,6 @@ public ResponseEntity<?> register(@RequestBody @Valid Student student) {
 		// and then store the Photo instance
 		// in the database
 		return ResponseEntity.ok(studentService.addStudentPhoto(sid, studentPhoto));
-	}
-
-	
-	// for user login authentication
-	//url="http://localhost:8080/student/login"
-	@PostMapping("/login")
-	public ResponseEntity<?> validateLogin(@RequestBody Credential credential){
-		return ResponseEntity.ok(studentService.validateLogin(credential));
 	}
 	
 	// store placement details
